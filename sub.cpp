@@ -97,7 +97,9 @@ return h;
 }
 int main()
 {
-string s1="1234";
-string s2="234";
+string s1;
+string s2;
+cin>>s1;
+cin>>s2;
 cout<<dif(s1,s2);
 }
