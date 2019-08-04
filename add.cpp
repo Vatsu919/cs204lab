@@ -35,15 +35,15 @@ return h;
 }
 int main()
 {
-    long long int k;
-    cin>>k;
-    for(int i=1;i<=k;i++)
+    long long int p;
+    cin>>p;
+    for(int i=1;i<=p;i++)
     {
     string j;
     string k;
     cin>>j;
     cin>>k;
-    cout<<ad(j,k);
+    cout<<ad(j,k)<<endl;
     }
 return 0;
 }
