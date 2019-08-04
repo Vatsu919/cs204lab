@@ -49,11 +49,17 @@ return h;
 }
 int main()
 {
- string w;
- string h;
- cin>>w;
- cin>>h;
- cout<<mul(w,h);
-
+    long long int k;
+    cin>>k;
+    for(int i=1;i<=k;i++)
+    {
+     string w;
+     string h;
+     cin>>w;
+     cin>>h;
+     cout<<mul(w,h);
+    }
+    
+ return 0;
 
 }
