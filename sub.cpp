@@ -97,9 +97,15 @@ return h;
 }
 int main()
 {
-string s1;
-string s2;
-cin>>s1;
-cin>>s2;
-cout<<dif(s1,s2);
+ long long int k;
+ cin>>k;
+ for(int i=1;i<=k;i++)
+ {
+  string s1;
+  string s2;
+  cin>>s1;
+  cin>>s2;
+  cout<<dif(s1,s2)<<endl;
+  }
+return 0;
 }
