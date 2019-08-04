@@ -30,7 +30,7 @@ int mast(string s1,string s2)
          i++;
       }
  }
- return 0;
+ return 1;
 }
 string dif(string s1,string s2)
 {
