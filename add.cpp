@@ -35,9 +35,9 @@ return h;
 }
 int main()
 {
-    long long int p;
-    cin>>p;
-    for(int i=1;i<=p;i++)
+    long long int e;
+    cin>>e;
+    for(int i=1;i<=e;i++)
     {
     string j;
     string k;
