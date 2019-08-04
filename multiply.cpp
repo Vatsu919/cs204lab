@@ -31,7 +31,7 @@ reverse(s2.begin(),s2.end());
     }
     p1++;
     }
-int i=p1+p2-2;
+int i=p1+p2-1;
 while(i>=0 && a[i]==0)
 {
     i--;
