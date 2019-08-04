@@ -57,7 +57,7 @@ int main()
      string h;
      cin>>w;
      cin>>h;
-     cout<<mul(w,h);
+     cout<<mul(w,h)<<endl;
     }
     
  return 0;
