@@ -97,9 +97,9 @@ return h;
 }
 int main()
 {
- long long int k;
- cin>>k;
- for(int i=1;i<=k;i++)
+ long long int e;
+ cin>>e;
+ for(int i=1;i<=e;i++)
  {
   string s1;
   string s2;
