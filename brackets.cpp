@@ -33,7 +33,7 @@ void balance(string s)
    }
    if(j.empty())
    {
-       cout<<"No";
+       cout<<"NO";
        return;
    }
    switch(s[i])
@@ -44,7 +44,7 @@ void balance(string s)
            j.pop();
            if(x=='[' || x=='(' || x=='<' || x=='|')
            {
-               cout<<"No";
+               cout<<"NO";
                return;
            }
         break;
@@ -55,7 +55,7 @@ void balance(string s)
            j.pop();
            if(x=='{' || x=='(' || x=='<' || x=='|')
            {
-               cout<<"No";
+               cout<<"NO";
                return;
            }
            break;
@@ -66,7 +66,7 @@ void balance(string s)
            j.pop();
            if(x=='[' || x=='{' || x=='<' || x=='|')
            {
-               cout<<"No";
+               cout<<"NO";
                return;
            }
            break;
@@ -77,7 +77,7 @@ void balance(string s)
            j.pop();
            if(x=='[' || x=='(' || x=='{' || x=='|')
            {
-               cout<<"No";
+               cout<<"NO";
                return;
            }
            break;
@@ -90,12 +90,12 @@ void balance(string s)
  
  if(j.empty())
  {
-     cout<<"Yes";
+     cout<<"YES";
      return;
  }
 else
 {
- cout<<"No";
+ cout<<"NO";
  return;
 }
 }
