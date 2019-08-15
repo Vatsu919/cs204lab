@@ -1,4 +1,5 @@
 #include<iostream>
+#include<bits/stdc++.h>
 #include<tuple>
 #include<cstdlib>
 using namespace std;
@@ -15,20 +16,20 @@ void Addfirst(int x,int y)
     nnode->ptr=hd;
     hd=nnode;
 }
-void Delfirst()
+int Delfirst()
 {
-    
+
     struct node *temp=hd;
     if(temp==NULL)
     {
-    return;
+    return -1;
     }
     hd=temp->ptr;
     free(temp);
 }
 int Del(int x,int y)
 {
-    
+
     struct node *temp=hd;
     if(temp==NULL)
     {
@@ -58,22 +59,30 @@ int Del(int x,int y)
 return -1;
 }
 
-void search(int d)
+int search(int d)
 {
  struct node *temp=hd;
+ int o=0;
  while(temp!=NULL)
  {
+
      int f=get<0>(temp->pt);
      int g=get<1>(temp->pt);
      if(f*f+g*g<=d*d)
      {
-         cout<<"("<<f<<","<<g<<")"<<endl;
+         o++;
      }
      temp=temp->ptr;
  }
+    if(o==0)
+    {
+        return -1;
+    }
+    else
+        return o;
 
 }
-int search(int x,int y)
+bool search(int x,int y)
 {
     struct node *temp=hd;
     int g=0;
@@ -83,11 +92,11 @@ int search(int x,int y)
      int h=get<1>(temp->pt);
      if(f==x && h==y)
      {
-        g++;
+        return true;
      }
      temp=temp->ptr;
     }
-    return g;
+    return false;
 }
 int length()
 {
@@ -121,7 +130,11 @@ cin>>k;
             }
             case 2:
             {
-                Delfirst();
+                int q=Delfirst();
+                if(q==-1)
+                {
+                 cout<<"-1";
+                }
                 break;
             }
             case 3:
@@ -129,6 +142,7 @@ cin>>k;
                 int c,d;
                 cin>>c>>d;
                 int e=Del(c,d);
+                if(e==-1)
                 cout<<e<<endl;
                 break;
             }
@@ -136,7 +150,11 @@ cin>>k;
             {
                 int f;
                 cin>>f;
-                search(f);
+                int w=search(f);
+                if(w==-1)
+                    cout<<"-1";
+                else
+                    cout<<w;
                 break;
             }
             case 5:
@@ -145,7 +163,10 @@ cin>>k;
                 int h;
                 cin>>g>>h;
                 int j=search(g,h);
-                cout<<j<<endl;
+                if(j==1)
+                    cout<<"True";
+                else
+                    cout<<"False";
                 break;
             }
             case 6:
@@ -162,3 +183,4 @@ cin>>k;
     }
 return 0;
 }
+
