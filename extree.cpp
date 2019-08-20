@@ -153,7 +153,7 @@ string infixToPostfix(string s)
         
     } 
       
-   cout<<ns;
+   
 return ns;  
 } 
 
@@ -233,7 +233,7 @@ int main()
         string j=infixToPostfix(l);
  
         tree* e=makkk(j);
-        inorder(e);
+        
         int o=eval(e);
         cout<<o;
         }
