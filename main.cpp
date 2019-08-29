@@ -1,297 +1,309 @@
-#include <bits/stdc++.h>
-
+#include<iostream>
+#include<stack>
+#include<bits/stdc++.h>
 using namespace std;
+map<string,long long int> m;
+map<string,long long int>::iterator it;
 
+struct tree{
+string data;
 
-string rezeros(string s)
- {
-       int i=0;
-         while(i<s.length())
-         {
-           if(s[i]=='0')
-           s.erase(s.begin()+i);
-           else if(s[i]!='0')
-         {
-           break;
-         }
-         }
-return s;
-}
-
-int mast(string s1,string s2)
+tree *right;
+tree *left;
+};
+bool isOperator(char c)
 {
- if(s1.length()>s2.length())
- {
-     return 1;
- }
- else if(s2.length()>s1.length())
- {
-     return 0;
- }
- else if(s1.length()==s2.length())
- {
-     int i=0;
-     while(i<s1.length())
-     {
-         int n1=s1[i]-'0';
-         int n2=s2[i]-'0';
-         if(n1>n2)
-         {
-             return 1;
-         }
-         if(n2>n1)
-         {
-             return 0;
-         }
-         i++;
-      }
- }
- return 1;
+    if (c == '+' || c == '-' ||
+            c == '*' || c == '/' ||
+            c == '^' || c=='(' || c==')' || c==',' || c=='=')
+        return true;
+    return false;
 }
-
-string ad(string s1,string s2)
+ tree* node(string h)
 {
-    string h;
- if(s1.length()<s2.length())
- {
-     swap(s1,s2);
- }
- int su=0;  //su stores sum of two digits of string along with carry
- int ca=0;  //ca is carry variable initialised to 0
- int l1=s1.length();
- int l2=s2.length();
- int k=l1-l2;
-         for(int i=l1-1;i>=k;i--)
-         {
-          su=(s1[i]-'0')+(s2[i-k]-'0')+ca;
-          ca=su/10;
-          su=su%10;
-          h.push_back(su+'0');
-         }
-         for(int i=k-1;i>=0;i--)
-         {
-          su=(s1[i]-'0')+ca;
-          su=su%10;
-          h.push_back(su+'0');
-
-        }
- reverse(h.begin(),h.end());
-return h;
-
+    tree* temp=new tree;
+    temp->left=NULL;
+    temp->right=NULL;
+    temp->data=h;
+    return temp;
 }
-string dif(string s1,string s2)
+tree* makkk(string s)
 {
-    string h;
- if(mast(s1,s2)==0)
- {
-  swap(s1,s2);
- }
-
-  int l1=s1.length();
-  int l2=s2.length();
-  int borrow=0;
-  int diff=0;
-  int k=l1-l2;
-       for(int i=l1-1;i>=k;i--)
-       {
-        diff=(s1[i]-'0')-(s2[i-k]-'0')-borrow;
-          if(diff<0)
-          {
-           diff+=10;
-           borrow=1;
-          }
-        else
-          {
-        borrow=0;
-          }
-   h.push_back(diff+'0');
-
-  }
-  for(int i=k-1;i>=0;i--)
+  stack<tree *> st;
+  tree *t,*t1,*t2;
+  int i=0;
+  while(i<s.length())
   {
-   diff=(s1[i]-'0')-borrow;
-   if(diff<0)
+   if(!isOperator(s[i]))
    {
-       diff+=10;
-       borrow=1;
+       string j;
+       while(s[i]!=',' && s[i]!=NULL)
+       {
+           j+=s[i];
+
+           i++;
+       }
+       t=node(j);
+       st.push(t);
+   }
+   else if(s[i]==',')
+   {
+       i++;
+       continue;
    }
    else
    {
-       borrow=0;
+       string j;
+       j+=s[i];
+       t=node(j);
+       t1=st.top();
+       st.pop();
+       t2=st.top();
+       st.pop();
+       t->right=t1;
+       t->left=t2;
+       st.push(t);
+       i++;
    }
-   h.push_back(diff+'0');
-}
-reverse(h.begin(),h.end());
-int i=0;
-while(i<h.length())
-{
-    if(h[i]=='0')
-    h.erase(h.begin()+i);
-    else if(h[i]!='0')
-    {
-    break;
-    }
+
+  }
+  t=st.top();
+  st.pop();
+  return t;
 
 
 }
-if(h.length()==0)
-{
-    h='0';
-}
-return h;
-}
 
-string mult(string s1,string s2)
+int prec(char c)
 {
-string h;
-int l1=s1.length();
-int l2=s2.length();
-int a[l1+l2]={0};
-int mul=0;
-int carry=0;
-int p1=0;
-int p2=0;
-reverse(s1.begin(),s1.end());
-reverse(s2.begin(),s2.end());
-    for(int i=0;i<l1;i++)
-    {
-        carry=0;
-        p2=0;
-    for(int j=0;j<l2;j++)
-    {
-     mul=(s1[i]-'0')*(s2[j]-'0')+a[p1+p2]+carry;
-     carry=mul/10;
-     a[p1+p2]=mul%10;
-     p2++;
-    }
-       if(carry!=0)
-      {
-       a[p1+p2]+=carry;
-      }
-    p1++;
-    }
-int i=p1+p2-2;
-while(i>=0 && a[i]==0)
-{
-    i--;
-}
-if(i==-1)
-{
-    return "0";
-}
-while(i>=0)
-{
- h.push_back(a[i]+'0');
- i--;
-}
-return h;
-}
-
-char getq(string s1,string s2)
-{
-    char p='0';
-            while(mast(s1,s2))
-            {
-                s1=dif(s1,s2);
-                ++p;
-            }
-            return p;
-}
-int mulchar(char a,char b)
-{
-    return (a-'0')*(b-'0');
-}
-string mul(string s1,char c)
-{
-    string h;
-    reverse(s1.begin(),s1.end());
-    int carry=0;
-          for(int i=0;i<s1.length();i++)
-          {
-              int mu=mulchar(s1[i],c)+carry;
-              carry=mu/10;
-              mu=mu%10;
-              h.push_back(mu+'0');
-          }
-          if(carry!=0)
-          {
-            h.push_back(carry+'0');
-          }
-  reverse(h.begin(),h.end());
-
-  return h;
-}
-
-string div(string s1,string s2)
-{
-    string q="";
-    string r;
-    if(mast(s1,s2)!=1)
-    {
-        q='0';
-        r=s1;
-    }
+    if(c == '^')
+    return 3;
+    else if(c == '*' || c == '/')
+    return 2;
+    else if(c == '+' || c == '-')
+    return 1;
     else
-    {
-        string y;
-        for(int i=0;i<s2.length();i++)
-        {
-            y.push_back(s1[i]);
+    return -1;
+}
 
+
+
+string infixToPostfix(string s)
+{
+    std::stack<char> st;
+    st.push('N');
+    int l = s.length();
+    string ns;
+    int i=0;
+    while(i<l)
+    {
+
+        if(!isOperator(s[i]))
+        {
+            while(!isOperator(s[i]) && s[i]!=NULL)
+            {
+             ns+=s[i];
+             i++;
+            }
+           ns+=',';
         }
 
-        for(int i=s2.length()-1;i<s1.length();i++)
+        else if(s[i] == '(')
         {
-
-            char qu=getq(y,s2);
-            q.push_back(qu);
-            string e=mul(s2,qu);
-            y=dif(y,e);
-            if(i<s1.length()-1)
-            {
-            y=y+s1[i+1];
-            }
+        st.push('(');
+        i++;
         }
-     r=y;
+
+        else if(s[i] == ')')
+        {
+            while(st.top() != 'N' && st.top() != '(')
+            {
+                char c = st.top();
+                st.pop();
+               ns += c;
+               ns+=',';
+            }
+            if(st.top() == '(')
+            {
+                char c = st.top();
+                st.pop();
+            }
+            i++;
+        }
+
+
+        else{
+            while(!st.empty() && (prec(s[i]) < prec(st.top())||(prec(s[i])==prec(st.top())&&prec(s[i])!=3)) )
+            {
+                char c = st.top();
+                st.pop();
+                ns += c;
+                ns+=',';
+            }
+            st.push(s[i]);
+            i++;
+        }
+
 
     }
-    r=rezeros(r);
-    q=rezeros(q);
-    if(r.length()==0)
-        r='0';
 
-    return r;
+    while(st.top() != 'N')
+    {
+        char c = st.top();
+        st.pop();
+        ns += c;
+        ns+=',';
+
+    }
+
+
+return ns;
 }
 
-void isprime(string s)
+
+ void inorder(tree *t)
 {
-    int f=0;
-    string i="2",b="1";
-    while(!mast(mult(i,i),s))
+    if(t)
     {
-        if(div(s,i)=="0")
-           {
-               f=1;
-               break;
-           }
-           i=ad(i,b);
+        inorder(t->left);
+        cout<<t->data;
+        inorder(t->right);
     }
-    if(f==1)
-    cout<<"Not a Prime"<<endl;
+}
+int toInt(string s)
+{
+    int num = 0;
+
+
+     if(s[0]!='-')
+        for (int i=0; i<s.length(); i++)
+            num = num*10 + (int(s[i])-48);
+
+
+
     else
-    cout<<"Prime"<<endl;
+        for (int i=1; i<s.length(); i++)
+        {
+            num = num*10 + (int(s[i])-48);
+            num = num*-1;
+        }
+
+    return num;
+}
+int eval(tree* root)
+{
+
+    if (!root)
+        return 0;
+
+
+    if (!root->left && !root->right){
+        bool is_number=true;
+        for(int i=0;i<root->data.size();i++)
+        {
+            if(root->data[i]>='0'&&root->data[i]<='9')
+                continue;
+            else{
+                is_number=false;
+                break;
+            }
+        }
+        if(is_number)
+            return toInt(root->data);
+        else
+        {
+            it=m.find(root->data);
+            return it->second;
+        }
+    }
+
+
+
+
+    int l_val = eval(root->left);
+
+
+    int r_val = eval(root->right);
+
+
+    if (root->data=="+")
+        return l_val+r_val;
+
+
+    if (root->data=="-")
+        return l_val-r_val;
+
+    if (root->data=="*")
+        return l_val*r_val;
+    if(root->data=="/")
+    return l_val/r_val;
+    if(root->data=="^")
+    return pow(l_val,r_val);
+
 
 }
 
 int main()
 {
-    long long int j;
-    cin>>j;
-    for(int i=1;i<=j;i++)
+    int t;
+    cin>>t;
+    for(int i=1;i<=t;i++)
     {
-    string h;
-    cin>>h;
-    isprime(h);
+        int n;
+        cin>>n;
+        bool cbe=false;
+        for(int k=1;k<=n;k++)
+        {
+        string l;
+        cin>>l;
+        int a,c=-1;
+        for(a=1;a<l.length();++a)
+        {
+            if(l[a]=='=')
+            {
+                c=a;
+            }
+
+        }
+        vector<string> v;
+
+        for(int i=c+1;i<l.length();i++)
+        {
+            string var;
+         while((l[i]>='a'&&l[i]<='z') || (l[i]>='A'&&l[i]<='Z'))
+         {
+             var.push_back(l[i]);
+             i++;
+         }
+        }
+        for(int i=0;i<v.size();i++)
+        {
+            it=m.find(v[i]);
+            if(it==m.end())
+            {
+                cout<<"cant be evaluated";
+                cbe=true;
+                break;
+            }
+        }
+        string j=infixToPostfix(l.substr(c+1,l.length()));
+        tree* e=makkk(j);
+
+        int o=eval(e);
+
+
+        if(c!=-1)
+        {
+         m[l.substr(0,c)]=o;
+         continue;
+        }
+         if(cbe=true)
+         {
+             cout<<"No bhai";
+         }
+         else
+            cout<<o;
+        }
     }
-    return 0;
+
 }
