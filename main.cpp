@@ -308,11 +308,11 @@ int main()
 
         if(q==INT_MIN)
         {
-            cout<<"can't be evaluated";
+            cout<<"can't be evaluated"<<endl;
         }
         else
         {
-            cout<<q;
+            cout<<q<<endl;
         }
         }
 
