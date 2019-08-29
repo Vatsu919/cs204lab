@@ -236,9 +236,9 @@ int eval(tree* root)
 
 int main()
 {
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++)
+    int p;
+    cin>>p;
+    for(int i=1;i<=p;i++)
     {
         int n;
         cin>>n;
