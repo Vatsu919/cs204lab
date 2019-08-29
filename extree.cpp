@@ -104,6 +104,22 @@ string infixToPostfix(string s)
             }
            ns+=',';
         }
+        else if(s[0]=='-')
+        {
+            st.push('-');
+            ns+=',';
+            ns+='0';
+            ns+=',';
+            i++;
+        }
+        else if((s[i]=='-'&&i>0)&&(s[i-1]==NULL || s[i-1]=='(' || isOperator(s[i-1])))
+            {
+            st.push('-');
+            ns+=',';
+            ns+='0';
+            ns+=',';
+            i++;
+        }
  
         else if(s[i] == '(') 
         { 
