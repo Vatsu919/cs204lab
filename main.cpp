@@ -1,327 +1,88 @@
-#include<iostream>
-#include<stack>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
-map<string,long long int> m;
-map<string,long long int>::iterator it;
 
-struct tree{
-string data;
+int visited[10000][10000];
+int input[10000][10000];
+int COUNT;
 
-tree *right;
-tree *left;
-};
-bool isOperator(char c)
+
+
+
+
+bool is_valid(int x, int y, int c, int n, int m)
 {
-    if (c == '+' || c == '-' ||
-            c == '*' || c == '/' ||
-            c == '^' || c=='(' || c==')' || c==',')
-        return true;
-    return false;
-}
- tree* node(string h)
-{
-    tree* temp=new tree;
-    temp->left=NULL;
-    temp->right=NULL;
-    temp->data=h;
-    return temp;
-}
-tree* makkk(string s)
-{
-  stack<tree *> st;
-  tree *t,*t1,*t2;
-  int i=0;
-  while(i<s.length())
-  {
-   if(!isOperator(s[i]))
-   {
-       string j;
-       while(s[i]!=',' && s[i]!=NULL)
-       {
-           j+=s[i];
-
-           i++;
-       }
-       t=node(j);
-       st.push(t);
-   }
-   else if(s[i]==',')
-   {
-       i++;
-       continue;
-   }
-   else
-   {
-       string j;
-       j+=s[i];
-       t=node(j);
-       t1=st.top();
-       st.pop();
-       t2=st.top();
-       st.pop();
-       t->right=t1;
-       t->left=t2;
-       st.push(t);
-       i++;
-   }
-
-  }
-  t=st.top();
-  st.pop();
-  return t;
-
-
-}
-
-int prec(char c)
-{
-    if(c == '^')
-    return 3;
-    else if(c == '*' || c == '/')
-    return 2;
-    else if(c == '+' || c == '-')
-    return 1;
-    else
-    return -1;
-}
-
-
-
-string infixToPostfix(string s)
-{
-    std::stack<char> st;
-    st.push('N');
-    int l = s.length();
-    string ns;
-    int i=0;
-    while(i<l)
+    if (x < n && y < m && x >= 0 && y >= 0)
     {
-
-        if(!isOperator(s[i]))
-        {
-            while(!isOperator(s[i]) && s[i]!=NULL)
-            {
-             ns+=s[i];
-             i++;
-            }
-           ns+=',';
-        }
-        else if(s[0]=='-')
-        {
-            st.push('-');
-            ns+=',';
-            ns+='0';
-            ns+=',';
-            i++;
-        }
-        else if((s[i]=='-'&&i>0)&&(s[i-1]==NULL || s[i-1]=='(' || isOperator(s[i-1])))
-            {
-            st.push('-');
-            ns+=',';
-            ns+='0';
-            ns+=',';
-            i++;
-        }
-
-        else if(s[i] == '(')
-        {
-        st.push('(');
-        i++;
-        }
-
-        else if(s[i] == ')')
-        {
-            while(st.top() != 'N' && st.top() != '(')
-            {
-                char c = st.top();
-                st.pop();
-               ns += c;
-               ns+=',';
-            }
-            if(st.top() == '(')
-            {
-                char c = st.top();
-                st.pop();
-            }
-            i++;
-        }
-
-
-        else{
-            while(!st.empty() && (prec(s[i]) < prec(st.top())||(prec(s[i])==prec(st.top())&&prec(s[i])!=3)) )
-            {
-                char c = st.top();
-                st.pop();
-                ns += c;
-                ns+=',';
-            }
-            st.push(s[i]);
-            i++;
-        }
-
-
+        if (visited[x][y] == false && input[x][y] == c) return true;
+        else return false;
     }
-
-    while(st.top() != 'N')
-    {
-        char c = st.top();
-        st.pop();
-        ns += c;
-        ns+=',';
-
-    }
-
-
-return ns;
+    else return false;
 }
 
-
- void inorder(tree *t)
+void BFS(int x, int y, int i, int j, int n, int m)
 {
-    if(t)
-    {
-        inorder(t->left);
-        cout<<t->data;
-        inorder(t->right);
-    }
+    if (x != y) return;
+    visited[i][j] = 1;
+    COUNT++;
+    int x_move[] = { 0, 0, 1, -1 };
+    int y_move[] = { 1, -1, 0, 0 };
+    for(int u=0;u<4;u++)
+        if (is_valid(i + y_move[u], j + x_move[u], x, n, m))
+            BFS(x, y, i + y_move[u], j + x_move[u], n, m);
 }
-int toInt(string s)
+
+void reset_visited(int n, int m)
 {
-    int num = 0;
-
-
-     if(s[0]!='-')
-        for (int i=0; i<s.length(); i++)
-            num = num*10 + (int(s[i])-48);
-
-
-
-    else
-        for (int i=1; i<s.length(); i++)
-        {
-            num = num*10 + (int(s[i])-48);
-            num = num*-1;
-        }
-
-    return num;
-}
-long long int eval(tree* root)
-{
-
-    if (!root)
-        return 0;
-    if(eval(root->left)==INT_MIN || eval(root->right)==INT_MIN)
+    for(int i=0;i<n;i++)
     {
-        return INT_MIN;
+        for(int j=0;j<m;j++) visited[i][j] = 0;
     }
-
-    if (!root->left && !root->right){
-        bool is_number=true;
-        for(int i=0;i<root->data.size();i++)
-        {
-            if(root->data[i]>='0'&&root->data[i]<='9')
-                continue;
-            else{
-                is_number=false;
-                break;
-            }
-        }
-        if(is_number)
-            return toInt(root->data);
-        else
-        {
-            it=m.find(root->data);
-            if(it!=m.end())
-            {
-            return it->second;
-            }
-            else
-            {
-                return INT_MIN;
-            }
-        }
-    }
-
-
-
-
-    int l_val = eval(root->left);
-
-
-    int r_val = eval(root->right);
-
-
-    if (root->data=="+")
-        return l_val+r_val;
-
-
-    if (root->data=="-")
-        return l_val-r_val;
-
-    if (root->data=="*")
-        return l_val*r_val;
-    if(root->data=="/")
-    return l_val/r_val;
-    if(root->data=="^")
-    return pow(l_val,r_val);
-
-
 }
 
+void resu(int n, int m)
+{
+    int current_max = INT_MIN, x;
+   for(int i=0;i<n;i++)
+    {
+       for(int j=0;j<m;j++)
+        {
+            if(input[i][j] == 1)
+            {
+                reset_visited(n, m);
+                COUNT = 0;
+                if (j + 1 < m) BFS(input[i][j], input[i][j + 1], i, j, n, m);
+                if (COUNT >= current_max)
+                {
+                    current_max = COUNT;
+                    x = input[i][j];
+                }
+                reset_visited(n, m);
+                COUNT = 0;
+                if (i + 1 < n) BFS(input[i][j], input[i + 1][j], i, j, n, m);
+                if (COUNT >= current_max)
+                {
+                    current_max = COUNT;
+                    x = input[i][j];
+                }
+            }
+        }
+    }
+    if(current_max == 0) current_max++;
+    cout<<current_max<<endl;
+}
 int main()
 {
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++)
+    int n, m, k, a, b;
+    cin>>n>>m>>k;
+
+    while(k--)
     {
-        int n;
-        cin>>n;
-        for(int k=1;k<=n;k++)
-        {
-        string l;
-        cin>>l;
-        int flag=0;
-        int c=-1;
-        for(int u=0;u<l.length();u++)
-        {
-            if(l[u]=='=')
-            {
-                flag=1;
-                c=u;
-            }
-        }
-        string h=l.substr(c+1,l.length());
-        string y=infixToPostfix(h);
-
-        tree *t=makkk(y);
-
-        long long int q=eval(t);
-        if(flag==1)
-        {
-            m[l.substr(0,c)]=q;
-            if(q==INT_MIN)
-        {
-            cout<<"can't be evaluated"<<endl;
-        }
-            continue;
-        }
-
-
-
-
-        if(q==INT_MIN)
-        {
-            cout<<"can't be evaluated"<<endl;
-        }
-        else
-        {
-            cout<<q<<endl;
-        }
-        }
-
-  m.clear();
+        cin>>a>>b;
+        input[a-1][b-1] = 1;
     }
 
+    resu(n, m);
 
+    return 0;
 }
