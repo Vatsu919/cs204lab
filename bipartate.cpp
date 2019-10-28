@@ -1,67 +1,83 @@
-#include<bits/stdc++.h>
-using namespace std;
-vector<int> adj[1000];
-vector<bool> vis;
-vector<int> colour;
-void adde(int u,int v)
-{
-    adj[u].push_back(v);
-    adj[v].push_back(u);
-}
+#include <bits/stdc++.h> 
+using namespace std; 
+  
 
-int bipartate(int v)
-{
-    for(int u : adj[v])
-    {
-        if(!vis[u])
-        {
-    
-            vis[u]=true;
-            colour[u]=1-colour[v];
-            if(!bipartate(u))
-            {
-                return 0;
-            }
+void adde(vector<int> adj[], int u, int v) 
+{ 
+    adj[u].push_back(v); 
+    adj[v].push_back(u); 
+} 
+
+bool isBipartite(vector<int> adj[], int v, 
+                 vector<bool>& visited, vector<int>& color) 
+{ 
+  
+    for (int u : adj[v]) { 
+  
         
-        }
-        else if(colour[u]==colour[v])
-        {
-            return 0;
-        }
-    }
+        if (visited[u] == false) { 
+  
+            
+            visited[u] = true; 
+  
+          
+            color[u] = 1-color[v]; 
+  
+            
+            if (!isBipartite(adj, u, visited, color)) 
+                return false; 
+        } 
+  
+        
+        else if (color[u] == color[v]) 
+            return false; 
+    } 
+    return true; 
+} 
+  
+
+int main() 
+{ 
     
-return 1;
-}
-int main()
-{
+    int N,m,k;
+    cin>>N>>m;
+     
+  
    
-    //vector<int> adj[3];
-    //vector<bool> vis;
-    //vector<int> colour;
-    //cin>>n>>m;
-   /*  for(int i=1;i<=m;i++)
+    vector<int> adj[N + 1]; 
+  
+  
+    vector<bool> visited(N + 1); 
+  
+  
+    vector<int> color(N + 1); 
+  
+   
+    for(int i=1;i<=m;i++)
     {
-        int u,v;
-        
-        cin>>u>>v;
+        int y,z;
+        cin>>y>>z;
         if(i==1)
         {
-            k=u;
+            k=y;
         }
-        adde(adj,u,v);
-    }*/
-    adde(1,2);
-    adde(2,1);
-    colour[1]=0;
-    vis[1]=true;
-    if(bipartate(1)==1)
-    {
-        cout<<"Yes it is bipartate";
-    }
-    else
-    {
-        cout<<"not bipartate";
+        adde(adj, y, z); 
     }
     
-
-}
+  
+   
+    visited[k] = true; 
+  
+    
+    color[k] = 0; 
+  
+   
+    if (isBipartite(adj, k, visited, color)) { 
+        cout << "Graph is Bipartite"; 
+    } 
+    else { 
+        cout << "Graph is not Bipartite"; 
+    } 
+  
+    return 0; 
+} 
