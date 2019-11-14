@@ -1,37 +1,73 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define M 1000000007
+#define M 10000007
 #define ll long long
-#define ld long double
-#define vi vector<int>
-#define vll vector<ll>
-#define pii pair<int, int>
 #define PB push_back
-#define io ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define io ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+
+static bool hash_table[4][M];
+static ll pr[4]={53,2311,13331,123457};
+
+ll choice(char c)
+{
+    if(c>='a'&&c<='z')
+    {
+        return (ll)(c-'a'+1);
+    }
+    else
+        return (ll)(c-'A'+27);
+}
+
+ll func(string &s,ll p)
+{
+    ll n=s.size();
+    ll r=1;
+    ll ans=0;
+    for(ll i=0;i<n;i++)
+    {
+        ans+=(r*choice(s[i]))%M;
+        ans%=M;
+        r*=p;
+        r%=M;
+    }
+    return ans;
+}
 
 int main()
 {
     io
     ll n;
     cin>>n;
-
-    string s[n];
-    for(int i=0;i<n;i++) cin>>s[i];
-
-    sort(s,s+n);
-
-    for(int i=0 ; i<n;i++)
+    vector<string> v;
+    while(n--)
     {
-        string temp = s[i];
-        reverse(temp.begin(),temp.end());
-        if(temp == s[i]) continue;
-
-        if(binary_search(s,s+n,temp))
+        string s;
+        cin>>s;
+        string t=s;
+        reverse(t.begin(),t.end());
+        if(s!=t)
         {
-            cout<<"YES"<<endl;
+            v.PB(s);
+            for(int j=0;j<4;j++)
+            {
+                hash_table[j][func(t,pr[j])]=true;
+            }
+        }
+    }
+    for(auto s:v)
+    {
+        bool flag=true;
+        for(int j=0;j<4;j++)
+        {
+            if(hash_table[j][func(s,pr[j])]==false) flag=false;
+        }
+        if(flag==true)
+        {
+            cout<<"YES";
             return 0;
         }
     }
-    cout<<"NO"<<endl;
+    cout<<"NO";
+
     return 0;
 }
